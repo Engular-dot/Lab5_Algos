@@ -33,9 +33,8 @@ def inorder(root, result=None):
     if result is None:
         result = []
     
-    if root is not None:
+    if root:
         inorder(root.left, result)
-        print(root.value, end=" ")
         result.append(root.value)
         inorder(root.right, result)
     
@@ -43,9 +42,11 @@ def inorder(root, result=None):
 
 
 def get_sorted_list(root):
-
     result = []
-    inorder(root, result)
+    if root:
+        result.extend(get_sorted_list(root.left))
+        result.append(root.value)
+        result.extend(get_sorted_list(root.right))
     return result
 
 
@@ -57,16 +58,18 @@ if __name__ == "__main__":
     
     for val in values:
         root = insert(root, val)
-        
+
     print("\nПоиск значений:")
     test_values = [40, 90, 25, 100]
     for val in test_values:
         found = search(root, val)
-        print(f"  Значение {val}: {'найдено' if found else 'не найдено'}")
+        print(f"  Значение {val}: {found}")
     
     
     print("\nСимметричный обход (возрастающий порядок):")
     sorted_list = inorder(root)
+    print(sorted_list)
+    print(f"Сумма всех элементов: {sum(sorted_list)}")
     
     
     print("\nОтсортированный список всех элементов:")
@@ -79,13 +82,4 @@ if __name__ == "__main__":
     sorted_list = get_sorted_list(root)
     print("Список после вставки дубликата:", sorted_list)
     print("Размер списка остался прежним - дубликаты не добавляются")
-    
-    
-    print("\nДругой пример: дерево из значений [5, 3, 7, 1, 4, 6, 8]")
-    root2 = None
-    for val in [5, 3, 7, 1, 4, 6, 8]:
-        root2 = insert(root2, val)
-    
-    print("Значения в порядке возрастания:")
-    inorder(root2)
-    print("\nОтсортированный список:", get_sorted_list(root2))
+
